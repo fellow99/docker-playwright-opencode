@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "opencode-serve",
+      "script": "opencode serve --hostname $OPENCODE_HOSTNAME --port $OPENCODE_PORT",
+      "exec_mode": "fork",
+      "instances": 1,
+      "autorestart": true
+    }
+  ]
+}

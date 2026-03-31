@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "openclaw",
+      "script": "openclaw gateway run",
+      "exec_mode": "fork",
+      "instances": 1,
+      "autorestart": true
+    }
+  ]
+}

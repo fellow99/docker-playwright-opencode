@@ -1,0 +1,39 @@
+ARG VERSION_OPENCODE=latest
+
+FROM fellow99/playwright-vnc:latest
+
+ENV HOME=/root
+
+# 安装 SpecKit
+RUN uv tool install specify-cli --from git+https://github.com/github/spec-kit.git && \
+	ln -sf $HOME/.local/bin/specify /bin/specify
+
+RUN npm config set registry https://registry.npmmirror.com && \
+	npm install -g \
+	bun \
+	pm2 \
+	pnpm \
+	node-gyp \
+	@ai-sdk/anthropic \
+	@larksuiteoapi/node-sdk \
+	@steipete/bird \
+	@vue/language-server @vue/language-service @vue/typescript-plugin vue-language-server typescript-language-server typescript \
+	mcporter skills clawhub \
+	chrome-devtools-mcp
+
+RUN npm install -g opencode-ai@${VERSION_OPENCODE}
+
+# 安装oh-my-opencode
+RUN bunx oh-my-openagent install --no-tui --claude=no --copilot=no --gemini=no
+
+RUN rm -rf /tmp/* /root/.npm /root/.cache
+
+COPY playwright-opencode.pm2.json "${HOME}"
+
+# 暴露端口
+EXPOSE 4096 8931 6080
+
+# 设置工作目录为 home
+WORKDIR /root/workspace
+
+CMD ["sh", "-c", "pm2-runtime start $HOME/playwright-opencode.pm2.json"]

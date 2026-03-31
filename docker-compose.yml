@@ -1,0 +1,35 @@
+services:
+  openclaw-all:
+    container_name: openclaw-all
+    image: fellow99/playwright-opencode-openclaw-java21:1.3.8-2026.3.28
+    restart: unless-stopped
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+    env_file: .env
+    volumes:
+      - ./playwright-opencode-openclaw.pm2.json:/root/playwright-opencode-openclaw.pm2.json
+      - ./.openclaw:/root/.openclaw
+      - ./.opencode/opencode.json:/root/.config/opencode/opencode.json
+      - ./.opencode/oh-my-opencode.json:/root/.config/opencode/oh-my-opencode.json
+      - ./.local_share_opencode:/root/.local/share/opencode
+      - ./.mcporter:/root/.mcporter
+      - ./workspace:/root/workspace
+      - ./user-data:/root/user-data
+      - ./.agents:/root/.agents
+      - ./.m2:/root/.m2
+      - ./.gradle:/root/.gradle
+    ports:
+      - 18789:18789
+      - 18790:18790
+      - 4096:4096
+      - 8931:8931
+      - 6080:6080
+      - 5173:5173
+      - 8080:8080
+      - 8000:8000
+      - 3000:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
